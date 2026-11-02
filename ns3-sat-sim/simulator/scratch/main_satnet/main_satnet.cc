@@ -39,6 +39,7 @@
 #include "ns3/arbiter-single-forward-helper.h"
 #include "ns3/ipv4-arbiter-routing-helper.h"
 #include "ns3/gsl-if-bandwidth-helper.h"
+#include "isl-interruption-experiment.h"
 
 using namespace ns3;
 
@@ -81,6 +82,9 @@ int main(int argc, char *argv[]) {
     // Schedule pings
     PingmeshScheduler pingmeshScheduler(basicSimulation, topology); // Requires enable_pingmesh_scheduler=true
 
+    // Optional single-flow metrics and a scheduled bidirectional ISL interruption.
+    IslInterruptionExperiment islInterruptionExperiment(basicSimulation, topology);
+
     // Run simulation
     basicSimulation->Run();
 
@@ -95,6 +99,8 @@ int main(int argc, char *argv[]) {
 
     // Collect utilization statistics
     topology->CollectUtilizationStatistics();
+
+    islInterruptionExperiment.Finalize();
 
     // Finalize the simulation
     basicSimulation->Finalize();
